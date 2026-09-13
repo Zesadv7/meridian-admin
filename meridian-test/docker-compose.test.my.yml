@@ -1,0 +1,83 @@
+services:
+  # 前端服务
+  meridian-frontend:
+    build:
+      context: ../meridian-frontend
+      dockerfile: Dockerfile
+    image: meridian-frontend:latest
+    container_name: meridian-frontend-test
+    environment:
+      TZ: UTC
+    ports:
+      - "80:80"
+    volumes:
+      - ../meridian-frontend/bin/nginx.dockermy.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - meridian-backend-my
+    networks:
+      - meridian-network-test
+
+  # 后端服务（MySQL版本）
+  meridian-backend-my:
+    build:
+      context: ../meridian-backend
+      dockerfile: Dockerfile.my
+    image: meridian-backend-my:latest
+    container_name: meridian-backend-my-test
+    ports:
+      - "9099:9099"
+    environment:
+      TZ: UTC
+      TRANSPORT_CRYPTO_ENABLED: "false"
+      TRANSPORT_CRYPTO_MODE: "off"
+    depends_on:
+      meridian-mysql:
+        condition: service_healthy
+      meridian-redis:
+        condition: service_healthy
+    networks:
+      - meridian-network-test
+
+  # MySQL服务
+  meridian-mysql:
+    image: mysql:8.0
+    container_name: meridian-mysql-test
+    environment:
+      TZ: UTC
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: meridian_admin
+    ports:
+      - "13307:3306"
+    volumes:
+      - ../meridian-backend/sql/meridian_admin.sql:/docker-entrypoint-initdb.d/01-meridian_admin.sql
+      - ./disable_captcha.sql:/docker-entrypoint-initdb.d/02-disable-captcha.sql
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci --skip-character-set-client-handshake=1
+    networks:
+      - meridian-network-test
+    healthcheck:
+      test: ["CMD", "bash", "-c", "mysqladmin ping -h localhost -u root -proot && mysql -h localhost -u root -proot -e 'SELECT 1'"]
+      interval: 5s
+      timeout: 10s
+      retries: 30
+
+  # Redis服务
+  meridian-redis:
+    image: redis:latest
+    container_name: meridian-redis-test
+    environment:
+      TZ: UTC
+    ports:
+      - "16380:6379"
+    networks:
+      - meridian-network-test
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 10s
+      retries: 30
+
+# 网络配置
+networks:
+  meridian-network-test:
+    name: meridian-network-test
+    driver: bridge
