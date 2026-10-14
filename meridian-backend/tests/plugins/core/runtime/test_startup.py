@@ -538,7 +538,9 @@ async def test_check_enabled_plugin_python_dependencies_marks_missing_dependency
     mark_plugin_runtime_error.assert_awaited_once_with(
         app,
         'ai',
-        ('插件启动依赖检查失败：Python 依赖未安装：agno；安装依赖请执行：meridian plugin install-deps ai --env=dev --yes'),
+        (
+            '插件启动依赖检查失败：Python 依赖未安装：agno；安装依赖请执行：meridian plugin install-deps ai --env=dev --yes'
+        ),
     )
 
 
@@ -640,7 +642,9 @@ async def test_check_enabled_plugin_python_dependencies_rechecks_dependency_erro
     mark_plugin_runtime_error.assert_awaited_once_with(
         app,
         'ai',
-        ('插件启动依赖检查失败：Python 依赖未安装：agno；安装依赖请执行：meridian plugin install-deps ai --env=dev --yes'),
+        (
+            '插件启动依赖检查失败：Python 依赖未安装：agno；安装依赖请执行：meridian plugin install-deps ai --env=dev --yes'
+        ),
     )
 
 
@@ -817,7 +821,9 @@ async def test_check_enabled_plugin_python_dependencies_never_installs_during_st
     mark_plugin_runtime_error.assert_awaited_once_with(
         app,
         'ai',
-        ('插件启动依赖检查失败：Python 依赖未安装：agno；安装依赖请执行：meridian plugin install-deps ai --env=dev --yes'),
+        (
+            '插件启动依赖检查失败：Python 依赖未安装：agno；安装依赖请执行：meridian plugin install-deps ai --env=dev --yes'
+        ),
     )
 
 
