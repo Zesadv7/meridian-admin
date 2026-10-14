@@ -78,10 +78,6 @@ meridian-admin
 └── meridian-test        # Playwright 端到端测试套件
 ```
 
-## 致谢
-
-本项目基于 [RuoYi-Vue-FastAPI](https://github.com/insistence/RuoYi-Vue-FastAPI)(insistence,MIT License)二次开发与深度定制:在保留其 FastAPI 全异步架构与 RBAC 主链路的基础上,完成了品牌重构、功能扩展、Docker 部署编排与 Playwright 端到端测试体系。感谢原项目作者与社区。
-
 ## License
 
-本项目基于 MIT 协议开源,继承并保留原项目 MIT 许可与版权声明。
+本项目基于 MIT 协议开源,详见 [LICENSE](LICENSE)。
